@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://labfile.oss.aliyuncs.com/courses/3774/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.box {
+    width: 530px;
+    height: 310px;
+    margin: 100px auto;
+}
+table {
+    width: 500px;
+    border-collapse: collapse;
+}
+table caption {
+    font-size: 30px;
+}
+thead {
+    display: block;
+}
+tbody {
+    display: block;
+    width: 524px;
+    height: 200px;
+    overflow: scroll; 
+}
+tr th,td {
+    border: 1px solid black;
+    text-align: center;
+}
+tr th {
+    height: 50px;
+    font-size: 20px;
+    background-color:rgb(31, 190, 238);
+}
+tr td {
+    height: 30px;
+    background-color: rgb(209, 242, 196);
+}
+.an {
+    margin-top: 10px;
+}
+#btn {
+    float: left;
+    height: 38px;
+}
+button {  
+    width: 80px;
+    font-weight: bolder;
+    border-radius: 10px;
+}
+.select{
+    float: left;
+    margin-left: 20px;
+    width: 300px;
+    height: 38px;
+    border: 1px solid black;
+}
+#btn1 {
+    border: none;
+    height: 30px;
+    line-height: 30px;
+}
+.select input {
+    width: 135px;
+    height: 30px;
+}
+.select select {
+    width: 70px;
+    height: 30px;
+    font-size: 20px;
+    border-style: none;
+    outline: none;
+    text-align: center;
+    border-radius: 10px;
+}
+    </style>
+    <script>
+        $(function () {
+    function datas(res) {
+        var data = res.data;
+        $("tbody tr").remove();
+        $.each(data, function (key, el) {
+            var tr = $("<tr></tr>");
+            $("table tbody").append(tr);
+            $(tr).append("<td style='width: 55px;'>" + el.id + "</td>");
+            $(tr).append("<td style='width: 137px;'>" + el.bookname + "</td>");
+            $(tr).append("<td style='width: 93px;'>" + el.author + "</td>");
+            $(tr).append("<td style='width: 214px;'>" + el.publisher + "</td>");
+        });
+        $("tbody td").mouseover(function () {
+            $(this).css("background-color", "rgb(145, 213, 100)");
+        }).mouseout(function () {
+            $(this).css("background-color", "rgb(209, 242, 200)");
+        });
+    }
+    $.ajaxSetup({
+        type: "GET",
+        url: "http://www.liulongbin.top:3006/api/getbooks",
+    });
+    $("#btn").click(function () {
+        $.ajax({
+            success: function (res) {
+                datas(res);
+            }
+        });
+    });
+    $("#btn1").click(function () {
+        var te = $(".select input").val().trim();
+        if ($("select").val() == "ID") {
+            $.ajax({
+                data: { id: te },
+                success: function (res) {
+                    datas(res);
+                }
+            });
+        } else if ($("select").val() == '名称') {
+            $.ajax({
+                data: { bookname: te },
+                success: function (res) {
+                    datas(res);
+                }
+            });
+        } else if ($("select").val() == '作者') {
+            $.ajax({
+                data: { author: te },
+                success: function (res) {
+                    datas(res);
+                }
+            });
+        } else if ($("select").val() == '书名') {
+            $.ajax({
+                data: { publisher: te },
+                success: function (res) {
+                    datas(res);
+                }
+            });
+        }
+
+    });
+
+});
+    </script>
+</head>
+
+<body>
+    <div class="box">
+        <table>
+            <caption>图书库</caption>
+            <thead>
+                <tr id="to">
+                    <th style="width: 55px;">ID</th>
+                    <th style="width: 137px;">名称</th>
+                    <th style="width: 93px;">作者</th>
+                    <th style="width:214px">书名</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="an">
+            <button id="btn">获取数据</button>
+            <div class="select">
+                <select name="" id="">
+                    <option>ID</option>
+                    <option>名称</option>
+                    <option>作者</option>
+                    <option>书名</option>
+                </select>
+                <input type="text">
+                <button id="btn1">查询</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
